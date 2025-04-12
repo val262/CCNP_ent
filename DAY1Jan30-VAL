@@ -1,6 +1,6 @@
 !@@@FOR CORE TAAS ONLY
 config t
-   hostname CORETAAS-12
+   hostname CORETAAS-22
    enable secret pass
    service password-encryption
    no logging console
@@ -15,24 +15,24 @@ config t
       exec-timeout 0 0
    Int Vlan 1
      no shutdown
-	 ip add 10.12.1.2 255.255.255.0
+	 ip add 10.22.1.2 255.255.255.0
 	 description MGMTDATA
    Int Vlan 10
      no shutdown
-	 ip add 10.12.10.2 255.255.255.0
+	 ip add 10.22.10.2 255.255.255.0
 	 description WIRELESS
    Int Vlan 50
      no shutdown
-	 ip add 10.12.50.2 255.255.255.0
+	 ip add 10.22.50.2 255.255.255.0
 	 description IPCCTV
    Int Vlan 100
      no shutdown
-	 ip add 10.12.100.2 255.255.255.0
+	 ip add 10.22.100.2 255.255.255.0
 	 description VOICEVLAN
 
 !@@@LeafSwitchONLY
 config t
-   hostname COREbaba12
+   hostname COREbaba22
    enable secret pass
    service password-encryption
    no logging console
@@ -48,22 +48,22 @@ config t
    Int Gi 0/1
      no shutdown
 	  no switchport
-	  ip add 10.M.M.4 255.255.255.0
+	  ip add 10.22.22.4 255.255.255.0
    Int Vlan 1
      no shutdown
-	 ip add 10.M.1.4 255.255.255.0
+	 ip add 10.22.1.4 255.255.255.0
 	 description MGMTDATA
    Int Vlan 10
      no shutdown
-	 ip add 10.M.10.4 255.255.255.0
+	 ip add 10.22.10.4 255.255.255.0
 	 description WIRELESS
    Int Vlan 50
      no shutdown
-	 ip add 10.M.50.4 255.255.255.0
+	 ip add 10.22.50.4 255.255.255.0
 	 description IPCCTV
    Int Vlan 100
      no shutdown
-	 ip add 10.12.100.4 255.255.255.0
+	 ip add 10.22.100.4 255.255.255.0
 	 description VOICEVLAN
 
 EncorLAB1: trunk it, etherchannit, allowit
@@ -81,31 +81,31 @@ Interface Range Fa0/10-12
 !DHCP: DYNAMIC HOST CONFIGURATION PROTOCOL
 !@@@LEAF SWITCH
 config t
-ip dhcp Excluded-add 10._.1.1 10._.1.100
-ip dhcp Excluded-add 10._.10.1 10._.10.100
-ip dhcp Excluded-add 10._.50.1 10._.50.100
-ip dhcp Excluded-add 10._.100.1 10._.100.100
+ip dhcp Excluded-add 10.22.1.1 10.22.1.100
+ip dhcp Excluded-add 10.22.10.1 10.22.10.100
+ip dhcp Excluded-add 10.22.50.1 10.22.50.100
+ip dhcp Excluded-add 10.22.100.1 10.22.100.100
 ip dhcp pool MGMTDATA
-   network 10._.1.0 255.255.255.0
-   default-router 10._.1.4
+   network 10.22.1.0 255.255.255.0
+   default-router 10.22.1.4
    domain-name MGMTDATA.COM
-   dns-server 10._.1.10
+   dns-server 10.22.1.10
 ip dhcp pool WIFIDATA
-   network 10._.10.0 255.255.255.0
-   default-router 10._.10.4
+   network 10.22.10.0 255.255.255.0
+   default-router 10.22.10.4
    domain-name WIFIDATA.COM
-   dns-server 10._.1.10
+   dns-server 10.22.1.10
 ip dhcp pool IPCCTV
-   network 10._.50.0 255.255.255.0
-   default-router 10._.50.4
+   network 10.22.50.0 255.255.255.0
+   default-router 10.22.50.4
    domain-name IPCCTV.COM
-   dns-server 10._.1.10
+   dns-server 10.22.1.10
 ip dhcp pool VOICEVLAN
-   network 10._.100.0 255.255.255.0
-   default-router 10._.100.4
+   network 10.22.100.0 255.255.255.0
+   default-router 10.22.100.4
    domain-name VOICEVLAN.COM
-   dns-server 10._.1.10
-   option 150 ip 10._.100.8   
+   dns-server 10.22.1.10
+   option 150 ip 10.22.100.8   
    END
 
 VTP: VLAN TRUNKING PROTOCOL: NEEDs trunking, SYNC VLANS.
@@ -145,27 +145,29 @@ Int Fa 0/3
   switchport access vlan 100     
 Int Fa 0/5
   switchport mode access
-  switchport access vlan 100  
+  switchport access vlan 1
+switchport voice vlan 100
 Int Fa 0/7
   switchport mode access
-  switchport access vlan 100    
+switchport voice vlan 100
+  switchport access vlan 1   
  end
 
 IP CAMERA needs MAC dhcp Reservation:
 CoreBABA:
 ip dhcp pool CAM6
-host 10._.50.6 255.255.255.0
-client-identifier 001a.0709.c258
+host 10.22.50.6 255.255.255.0
+client-identifier 001a.0704.7f6a
 ip dhcp pool CAM8
-host 10._.50.8 255.255.255.0
-client-identifier 001a.0704.7f5b
+host 10.22.50.8 255.255.255.0
+client-identifier 001a.0709.c238
 end
 sh ip dhcp binding
 
 !!cisco unified call manager Express command
 !@@@CUCM-M
 config t
-   hostname CUCM-_
+   hostname CUCM-22
    enable secret pass
    service password-encryption
    no logging console
@@ -180,22 +182,22 @@ config t
       exec-timeout 0 0
    Int Fa 0/0
      no shutdown
-	 ip add 10._.100.8 255.255.255.0 
+	 ip add 10.22.100.8 255.255.255.0 
 	 end
    
 !!!CUCM ANALOG PHONES CONFIG
 configure terminal
 dial-peer voice 1 pots
-   destination-pattern m00
+   destination-pattern 2200
    port 0/0/0
 dial-peer voice 2 pots
-   destination-pattern m01
+   destination-pattern 2201
    port 0/0/1
 dial-peer voice 3 pots
-   destination-pattern m02
+   destination-pattern 2202
    port 0/0/2
 dial-peer voice 4 pots
-   destination-pattern m03
+   destination-pattern 2203
    port 0/0/3
 end
 
@@ -207,26 +209,26 @@ telephony-service
    no auto-reg-ephone
    max-ephones 5
    max-dn 20
-   ip source-address 10._.100.8 port 2000
+   ip source-address 10.22.100.8 port 2000
    create cnf-files
 ephone-dn 1
-  number _11
+  number 2211
 ephone-dn 2
-  number _22
+  number 2222
 ephone-dn 3
-  number _33
+  number 2233
 ephone-dn 4
-  number _44
+  number 2244
 ephone-dn 5
-  number _55
+  number 2255
 ephone-dn 6
-  number _66
+  number 2266
 ephone-dn 7
-  number _77
+  number 22227
 ephone-dn 8
-  number _88	
+  number 2288	
 Ephone 1
-  Mac-address ____.____.____
+  Mac-address 64e9.50ca.747e
   type 8945
   button 1:1 2:3 3:2 4:4
   restart
@@ -263,18 +265,18 @@ configure terminal
  destination-pattern 11..
  session target ipv4:10.11.100.8
  codec g711ULAW
-!dial-peer voice 12 Voip
-! destination-pattern 12..
-! session target ipv4:10.12.100.8
-! codec g711ULAW
+dial-peer voice 12 Voip
+ destination-pattern 12..
+ session target ipv4:10.12.100.8
+ codec g711ULAW
 dial-peer voice 21 Voip
  destination-pattern 21..
  session target ipv4:10.21.100.8
  codec g711ULAW
-dial-peer voice 22 Voip
- destination-pattern 22..
- session target ipv4:10.22.100.8
- codec g711ULAW
+!dial-peer voice 22 Voip
+ !destination-pattern 22..
+ !session target ipv4:10.22.100.8
+ !codec g711ULAW
 dial-peer voice 31 Voip
  destination-pattern 31..
  session target ipv4:10.31.100.8
@@ -327,7 +329,7 @@ dial-peer voice 82 Voip
 @@@@@@
 !@@@EDGE ROUTE CONFIG
 config t
-   hostname EDGE12
+   hostname EDGE22-baba
    enable secret pass
    service password-encryption
    no logging console
@@ -342,33 +344,33 @@ config t
       exec-timeout 0 0
    Int Gi 0/0/0
      description INSIDE
-     ip add 10.m.m.1 255.255.255.0
+     ip add 10.22.22.1 255.255.255.0
 	 no shutdown
    Int Gi 0/0/1
      description OUTSIDE
-	 ip add 200.0.0.m 255.255.255.0
+	 ip add 200.0.0.22 255.255.255.0
 	 no shutdown
    Int Loopback 0
      description VIRTUALIP
-	 ip add m.0.0.1 255.255.255.255
+	 ip add 22.0.0.1 255.255.255.255
  end
 
 ! mULTI AREA OSPF CONFIGURATION:
 @edge:
 config t
 router ospf 1
-router-id m.0.0.1
+router-id 22.0.0.1
 network 200.0.0.0 0.0.0.255 area 0
-network m.0.0.1 0.0.0.0 area M
-network 10.m.m.0 0.0.0.255 area M
+network 22.0.0.1 0.0.0.0 area 22
+network 10.22.22.0 0.0.0.255 area 22
 @CoreBABA:   use Route summarization:
 config t
 router ospf 1
-network 10.m.0.0 0.0.255.255 area M
+network 10.22.0.0 0.0.255.255 area 22
 @CUCN:  use SUperTamad method:
 config t
 router ospf 1
-network 0.0.0.0  255.255.255.255 area M
+network 0.0.0.0  255.255.255.255 area 22
 
 
 
@@ -416,16 +418,14 @@ route add 200.0.0.0 mask 255.255.255.0 10.m.1.4
 route add 10.0.0.0 mask 255.0.0.0 10.m.1.4
 
 ********************************************
-
  
 @@@@@@@@@
-
 config t
 dial-peer voice 69 voip
  service rivanaa out-bound
- destination-pattern m69
- session target ipv4:10.m.100.8
- incoming called-number m69
+ destination-pattern 2269
+ session target ipv4:10.22.100.8
+ incoming called-number 2269
  dtmf-relay h245-alphanumeric
  codec g711ulaw
  no vad
@@ -448,13 +448,13 @@ application
   param max-time-vm-retry 2
   param voice-mail 1234
   param max-time-call-retry 700
-  param aa-pilot m69
+  param aa-pilot 2269
  service rivanqueue flash:app-b-acd-3.0.0.2.tcl
   param queue-len 15
-  param aa-hunt1 m00
-  param aa-hunt2 m77
-  param aa-hunt3 m01
-  param aa-hunt4 m55
+  param aa-hunt1 2200
+  param aa-hunt2 2277
+  param aa-hunt3 2201
+  param aa-hunt4 2255
   param queue-manager-debugs 1
   param number-of-hunt-grps 4
 ****************************************************************************
@@ -530,38 +530,38 @@ conf t
   allow-connections sip to sip
   supplementary-service h450.12
  sip
-   bind control source-interface _____0/0
-   bind media source-interface _____0/0
+   bind control source-interface fa0/0
+   bind media source-interface fa0/0
    registrar server expires max 600 min 60
 !
  voice register global
   mode cme
-  source-address 192.168._.1 port 5060
+  source-address 10.22.100.8 port 5060
   max-dn 12
   max-pool 12
   authenticate register
   create profile sync
  voice register dn 1
-   number ____
+   number 2223
    allow watch
-   name _______
+   name 2223
  voice register dn 2
-   number ___
+   number 2243
    allow watch
-   name _______
+   name 2243
           
   voice register pool 1
-    id mac ____.____.____
+    id mac 48eb.626b.a414
     number 1 dn 1
     dtmf-relay sip-notify
-    username ____ password ____
+    username 2223 password 2223
     codec g711ulaw
 !
   voice register pool 1
-    id mac ____.____.____
+    id mac 749e.af1f.4f2f
     number 1 dn 2
     dtmf-relay sip-notify
-    username ____ password ____
+    username 2243 password 2243
     codec g711ulaw
 !
 *******call other countries!!!********
